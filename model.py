@@ -71,11 +71,16 @@ clf.fit(X_train, y_train, eval_set=eval_set, eval_metric="auc", early_stopping_r
 
 pred = clf.predict_proba(X_test)[:,1]
 
-def predict(dict_values, cols=cols, clf=clf):
+def predict(values, cols=cols, clf=clf):
+    values = list(map(float, values.split(',')))
+    print(len(cols))
+    df_pred = pd.DataFrame(values, columns=cols)
+    print(df_pred)
+    print(len(values))
     print(dict_values)
     # x = np.array([float(dict_values[col]) for col in cols])
     # x = x.reshape(1,-1)
     # print(x)
     # y_pred = clf.predict(x)[0]
     # return y_pred
-    return dict_values, dict_values 
+    return values[1], dict_values[-1] 
