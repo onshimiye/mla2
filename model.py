@@ -9,6 +9,8 @@ Original file is located at
 ## Importing tools and loading dataset
 """
 
+import xgboost as xgb
+from sklearn.model_selection import train_test_split
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -23,27 +25,41 @@ data = pd.read_csv('dataset.csv')
 label_encoder = LabelEncoder()
 data['gender'] = label_encoder.fit_transform(data['gender'].astype('str'))
 data['Partner'] = label_encoder.fit_transform(data['Partner'].astype('str'))
-data['Dependents'] = label_encoder.fit_transform(data['Dependents'].astype('str'))
-data['PhoneService'] = label_encoder.fit_transform(data['PhoneService'].astype('str'))
-data['MultipleLines'] = label_encoder.fit_transform(data['MultipleLines'].astype('str'))
-data['InternetService'] = label_encoder.fit_transform(data['InternetService'].astype('str'))
-data['OnlineSecurity'] = label_encoder.fit_transform(data['OnlineSecurity'].astype('str'))
-data['OnlineBackup'] = label_encoder.fit_transform(data['OnlineBackup'].astype('str'))
-data['DeviceProtection'] = label_encoder.fit_transform(data['DeviceProtection'].astype('str'))
-data['TechSupport'] = label_encoder.fit_transform(data['TechSupport'].astype('str'))
-data['StreamingTV'] = label_encoder.fit_transform(data['StreamingTV'].astype('str'))
+data['Dependents'] = label_encoder.fit_transform(
+    data['Dependents'].astype('str'))
+data['PhoneService'] = label_encoder.fit_transform(
+    data['PhoneService'].astype('str'))
+data['MultipleLines'] = label_encoder.fit_transform(
+    data['MultipleLines'].astype('str'))
+data['InternetService'] = label_encoder.fit_transform(
+    data['InternetService'].astype('str'))
+data['OnlineSecurity'] = label_encoder.fit_transform(
+    data['OnlineSecurity'].astype('str'))
+data['OnlineBackup'] = label_encoder.fit_transform(
+    data['OnlineBackup'].astype('str'))
+data['DeviceProtection'] = label_encoder.fit_transform(
+    data['DeviceProtection'].astype('str'))
+data['TechSupport'] = label_encoder.fit_transform(
+    data['TechSupport'].astype('str'))
+data['StreamingTV'] = label_encoder.fit_transform(
+    data['StreamingTV'].astype('str'))
 data['Contract'] = label_encoder.fit_transform(data['Contract'].astype('str'))
-data['StreamingMovies'] = label_encoder.fit_transform(data['StreamingMovies'].astype('str'))
-data['PaperlessBilling'] = label_encoder.fit_transform(data['PaperlessBilling'].astype('str'))
-data['PaymentMethod'] = label_encoder.fit_transform(data['PaymentMethod'].astype('str'))
-data['churn_encoded'] = label_encoder.fit_transform(data['Churn'].astype('str'))
+data['StreamingMovies'] = label_encoder.fit_transform(
+    data['StreamingMovies'].astype('str'))
+data['PaperlessBilling'] = label_encoder.fit_transform(
+    data['PaperlessBilling'].astype('str'))
+data['PaymentMethod'] = label_encoder.fit_transform(
+    data['PaymentMethod'].astype('str'))
+data['churn_encoded'] = label_encoder.fit_transform(
+    data['Churn'].astype('str'))
 
 # data.head()
 
 # select relevant features
 
 # cols = ["customerID", "gender", "SeniorCitizen", "Partner", "Dependents", "tenure", "PhoneService", "MultipleLines", "InternetService", "OnlineSecurity", "OnlineBackup", "DeviceProtection", "TechSupport", "StreamingTV", "StreamingMovies", "Contract", "PaperlessBilling", "PaymentMethod", "MonthlyCharges", "TotalCharges"]
-cols = ["gender", "SeniorCitizen", "Partner", "Dependents", "tenure", "PhoneService", "MultipleLines", "InternetService", "OnlineSecurity", "OnlineBackup", "DeviceProtection", "TechSupport", "StreamingTV", "StreamingMovies", "Contract", "PaperlessBilling", "PaymentMethod", "MonthlyCharges", "TotalCharges"]
+cols = ["gender", "SeniorCitizen", "Partner", "Dependents", "tenure", "PhoneService", "MultipleLines", "InternetService", "OnlineSecurity", "OnlineBackup",
+        "DeviceProtection", "TechSupport", "StreamingTV", "StreamingMovies", "Contract", "PaperlessBilling", "PaymentMethod", "MonthlyCharges", "TotalCharges"]
 
 # data.shape
 
@@ -51,36 +67,32 @@ y = data['churn_encoded']
 
 x = data[cols]
 
-from sklearn.model_selection import train_test_split
 
 # split into train test sets
-X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.20, stratify=y)
+X_train, X_test, y_train, y_test = train_test_split(
+    x, y, test_size=0.20, stratify=y)
 print(X_train.shape, X_test.shape, y_train.shape, y_test.shape)
 
 # import libraries needed
-import xgboost as xgb
 
-clf = xgb.XGBClassifier(n_estimators = 10000, 
-                            max_depth = 7,
-                            min_child_weight = 3,
-                            subsample = 1)
+clf = xgb.XGBClassifier(n_estimators=10000,
+                        max_depth=7,
+                        min_child_weight=3,
+                        subsample=1)
 
-eval_set  = [( X_train, y_train), ( X_test, y_test)]
+eval_set = [(X_train, y_train), (X_test, y_test)]
 
-clf.fit(X_train, y_train, eval_set=eval_set, eval_metric="auc", early_stopping_rounds=30)
+clf.fit(X_train, y_train, eval_set=eval_set,
+        eval_metric="auc", early_stopping_rounds=30)
 
-pred = clf.predict_proba(X_test)[:,1]
+pred = clf.predict_proba(X_test)[:, 1]
 
-def predict(values, cols=cols, clf=clf):
-    values = list(map(float, values.split(',')))
-    print(len(cols))
-    df_pred = pd.DataFrame(values, columns=cols)
-    print(df_pred)
-    print(len(values))
-    print(dict_values)
-    # x = np.array([float(dict_values[col]) for col in cols])
-    # x = x.reshape(1,-1)
-    # print(x)
-    # y_pred = clf.predict(x)[0]
-    # return y_pred
-    return values[1], dict_values[-1] 
+
+def predict(gender_class, senior_citizen, partener, dependents, tenure, phone_service, multiple_lines, internet_service, online_security, online_backup, device_protection, tech_support, streaming_tv, streaming_movies, contract, paperless_billing, payment_method, monthly_charges, total_charges, cols=cols, clf=clf):
+    df = pd.DataFrame(np.array([[gender_class, senior_citizen, partener, dependents, tenure, phone_service, multiple_lines, internet_service, online_security, online_backup, device_protection, tech_support, streaming_tv, streaming_movies, contract, paperless_billing, payment_method, monthly_charges, total_charges]]), columns=cols)
+    print(df)
+    pred = clf.predict_proba(df)[:,1]
+    print(pred)
+    confidence = pred[0]
+    pred = 1 if pred[0] >= 0.5 else 0
+    return pred, confidence.round(2)
