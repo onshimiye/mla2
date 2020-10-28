@@ -5,6 +5,7 @@
 <head>
     <title>Customer Churn Prediction</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
     <style>
         .label {
             color: white;
@@ -20,19 +21,23 @@
             grid-column-start: 1;
             grid-column-end: 3;
         }
+        
+        * {
+            font-family: 'Noto Sans', sans-serif;
+        }
     </style>
 </head>
 
 <body style="background-color:black">
-    <div id="maintext" style="position:absolute; margin:auto; width:700px; height:200px; text-align:center; top:0; bottom: 0; left: 0; right: 0;">
+    <div id="maintext" style="margin:auto; width:700px; height:200px; text-align:center; top:0; bottom: 0; left: 0; right: 0;">
         <h1 class="text-light mb-2"> Welcome to Customer Churn Prediction Platform </h1>
         <h4 class="text-light mb-5">Provide customer data in a from below.</h4>
-        <p class="text-light"> Required fields: gender, SeniorCitizen, Partner, Dependents, tenure, PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TechSupport, StreamingTV, StreamingMovies, Contract, PaperlessBilling, PaymentMethod,
+        <p class="text-light" style="text-align: justify;"> Required fields: gender, SeniorCitizen, Partner, Dependents, tenure, PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TechSupport, StreamingTV, StreamingMovies, Contract, PaperlessBilling, PaymentMethod,
             MonthlyCharges, TotalCharges</p>
 
         <form method=post enctype=multipart/form-data>
             <span class=label>Gender</span>
-            <select name=gender class=selector>
+            <select name=gender class=custom-select>
               <option value=1>Male</option>
               <option value=0>Female</option>
             </select>
@@ -40,34 +45,34 @@
 
 
             <span class=label>Senior Citizen</span>
-            <input type=number name=senior-citizen required>
+            <input type=number name=senior-citizen class=form-control required>
 
 
             <span class=label>Partner</span>
-            <select name=partener class=selector>
+            <select name=partener class=custom-select>
               <option value=1>Yes</option>
               <option value=0>No</option>
             </select>
 
             <span class=label>Dependents</span>
-            <select name=dependents class=selector>
+            <select name=dependents class=custom-select>
               <option value=1>Yes</option>
               <option value=0>No</option>
             </select>
 
             <span class=label>Tenure</span>
-            <input type=number name=tenure required>
+            <input type=number name=tenure class=form-control required>
 
 
             <span class=label>Phone Service</span>
-            <select name=phone-service class=selector>
+            <select name=phone-service class=custom-select>
               <option value=1>Yes</option>
               <option value=0>No</option>
             </select>
 
 
             <span class=label>Multiple Lines</span>
-            <select name=multiple-lines class=selector>
+            <select name=multiple-lines class=custom-select>
               <option value=1>No phone service</option>
               <option value=0>No</option>
               <option value=2>Yes</option>
@@ -75,7 +80,7 @@
 
 
             <span class=label>Internet Service</span>
-            <select name=internet-service class=selector>
+            <select name=internet-service class=custom-select>
               <option value=0>DSL</option>
               <option value=1>Fiber optic</option>
               <option value=2>No</option>
@@ -83,7 +88,7 @@
 
 
             <span class=label>OnlineSecurity</span>
-            <select name=online-security class=selector>
+            <select name=online-security class=custom-select>
               <option value=0>No</option>
               <option value=2>Yes</option>
               <option value=1>No internet service</option>
@@ -91,7 +96,7 @@
 
 
             <span class=label>Online Backup</span>
-            <select name=online-backup class=selector>
+            <select name=online-backup class=custom-select>
               <option value=0>No</option>
               <option value=2>Yes</option>
               <option value=1>No internet service</option>
@@ -99,7 +104,7 @@
 
 
             <span class=label>Device Protection</span>
-            <select name=device-protection class=selector>
+            <select name=device-protection class=custom-select>
               <option value=0>No</option>
               <option value=1>Yes</option>
               <option value=1>No internet service</option>
@@ -107,7 +112,7 @@
 
 
             <span class=label>Tech Support</span>
-            <select name=tech-support class=selector>
+            <select name=tech-support class=custom-select>
               <option value=0>No</option>
               <option value=2>Yes</option>
               <option value=1>No internet service</option>
@@ -115,7 +120,7 @@
 
 
             <span class=label>Streaming TV</span>
-            <select name=streaming-tv class=selector>
+            <select name=streaming-tv class=custom-select>
               <option value=0>No</option>
               <option value=2>Yes</option>
               <option value=1>No internet service</option>
@@ -123,7 +128,7 @@
 
 
             <span class=label>Streaming Movies</span>
-            <select name=streaming-movies class=selector>
+            <select name=streaming-movies class=custom-select>
               <option value=0>No</option>
               <option value=2>Yes</option>
               <option value=1>No internet service</option>
@@ -131,7 +136,7 @@
 
 
             <span class=label>Contract</span>
-            <select name=contract class=selector>
+            <select name=contract class=custom-select>
               <option value=0>Month-to-Month</option>
               <option value=1>One year</option>
               <option value=2>Two year</option>
@@ -139,27 +144,28 @@
 
 
             <span class=label>Paperless Billing</span>
-            <select name=paperless-billing class=selector>
+            <select name=paperless-billing class=custom-select>
               <option value=1>Yes</option>
               <option value=0>No</option>
             </select>
 
 
             <span class=label>Payment Method</span>
-            <select name=payment-method class=selector>
+            <select name=payment-method class=custom-select>
               <option value=2>Electronic check</option>
               <option value=3>Mailed check</option>
               <option value=0>Bank transfer (automatic)</option>
               <option value=1>Credit card (automatic)</option>
             </select>
 
-            <span class=label>Monthly Charges</span> <input type=number name=monthly-charges required>
+            <span class=label>Monthly Charges</span> <input type=number name=monthly-charges class=form-control required>
 
-            <span class=label>Total Charges</span> <input type=number name=total-charges required>
+            <span class=label>Total Charges</span> <input type=number name=total-charges class=form-control required>
 
 
 
-            <input id=submit type=submit value=Predict>
+            <input id=submit type=submit class="btn btn-primary mb-2" value=Predict>
+            <br>
         </form>
     </div>
 </body>
