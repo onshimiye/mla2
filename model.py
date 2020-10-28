@@ -55,9 +55,23 @@ data['churn_encoded'] = label_encoder.fit_transform(
 
 # data.head()
 
-# select relevant features
+#Correlation with output variable
+cor = data.corr()
+cor_target = abs(cor["churn_encoded"])
+#Selecting highly correlated features
+relevant_features = cor_target[cor_target>0.15]
 
-# cols = ["customerID", "gender", "SeniorCitizen", "Partner", "Dependents", "tenure", "PhoneService", "MultipleLines", "InternetService", "OnlineSecurity", "OnlineBackup", "DeviceProtection", "TechSupport", "StreamingTV", "StreamingMovies", "Contract", "PaperlessBilling", "PaymentMethod", "MonthlyCharges", "TotalCharges"]
+"""### These are the features that correlates with the label variable by 15%"""
+
+
+rel = relevant_features.drop('churn_encoded')
+
+"""### Filtering out those features that correlates with the label variable the most"""
+
+data = data[relevant_features.index]
+
+
+# # cols = ["customerID", "gender", "SeniorCitizen", "Partner", "Dependents", "tenure", "PhoneService", "MultipleLines", "InternetService", "OnlineSecurity", "OnlineBackup", "DeviceProtection", "TechSupport", "StreamingTV", "StreamingMovies", "Contract", "PaperlessBilling", "PaymentMethod", "MonthlyCharges", "TotalCharges"]
 cols = ["gender", "SeniorCitizen", "Partner", "Dependents", "tenure", "PhoneService", "MultipleLines", "InternetService", "OnlineSecurity", "OnlineBackup",
         "DeviceProtection", "TechSupport", "StreamingTV", "StreamingMovies", "Contract", "PaperlessBilling", "PaymentMethod", "MonthlyCharges", "TotalCharges"]
 
@@ -65,7 +79,7 @@ cols = ["gender", "SeniorCitizen", "Partner", "Dependents", "tenure", "PhoneServ
 
 y = data['churn_encoded']
 
-x = data[cols]
+x = data.drop(['churn_encoded'], axis=1)
 
 
 # split into train test sets
@@ -85,14 +99,15 @@ eval_set = [(X_train, y_train), (X_test, y_test)]
 clf.fit(X_train, y_train, eval_set=eval_set,
         eval_metric="auc", early_stopping_rounds=30)
 
-pred = clf.predict_proba(X_test)[:, 1]
+# pred = clf.predict_proba(X_test)[:, 1]
 
 
 def predict(gender_class, senior_citizen, partener, dependents, tenure, phone_service, multiple_lines, internet_service, online_security, online_backup, device_protection, tech_support, streaming_tv, streaming_movies, contract, paperless_billing, payment_method, monthly_charges, total_charges, cols=cols, clf=clf):
     df = pd.DataFrame(np.array([[gender_class, senior_citizen, partener, dependents, tenure, phone_service, multiple_lines, internet_service, online_security, online_backup, device_protection, tech_support, streaming_tv, streaming_movies, contract, paperless_billing, payment_method, monthly_charges, total_charges]]), columns=cols)
     print(df)
+    df = df[rel.index]
     pred = clf.predict_proba(df)[:,1]
     print(pred)
-    confidence = pred[0]
-    pred = 1 if pred[0] >= 0.5 else 0
+    confidence = pred[0] * 100
+    pred = 'Yes' if pred[0] >= 0.5 else 'No'
     return pred, confidence.round(2)
